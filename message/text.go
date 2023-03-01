@@ -8,21 +8,23 @@ import (
 
 // 普通文本消息
 type Text struct {
-	Timestamp string      `json:"timestamp"`
-	Sign      string      `json:"sign"`
-	Msg_type  string      `json:"msg_Type"`
-	Content   interface{} `json:"content"`
+	Timestamp string                 `json:"timestamp,omitempty"`
+	Sign      string                 `json:"sign,omitempty"`
+	Msg_type  string                 `json:"msg_type"`
+	Content   map[string]interface{} `json:"content"`
+}
+
+// 添加消息内容
+func (text *Text) AddContent(msg string) {
+	text.Content = map[string]interface{}{
+		TEXT_MESSAGE_TYPE: msg,
+	}
 }
 
 func (text Text) GetMsgJson() (string, error) {
 	if text.Msg_type == "" {
 		text.Msg_type = TEXT_MESSAGE_TYPE
 	}
-	contentJson, err := json.Marshal(text.Content)
-	if err != nil {
-		return "", err
-	}
-	text.Content = string(contentJson)
 	textJson, err := json.Marshal(text)
 	if err != nil {
 		return "", err

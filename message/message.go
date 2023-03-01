@@ -11,7 +11,7 @@ const (
 // 消息体
 type Message interface {
 	// 获取用于发送的消息体
-	GetMsgJson() string
+	GetMsgJson() (string, error)
 	// 签名消息
 	SignMsg(key string)
 }
