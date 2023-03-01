@@ -6,7 +6,7 @@ const (
 
 // 发送消息响应
 type Response struct {
-	code int64
-	msg  string
-	data interface{}
+	Code int64       `json:"code"`
+	Msg  string      `json:"msg"`
+	Data interface{} `json:"data"`
 }

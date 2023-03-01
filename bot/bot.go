@@ -3,10 +3,10 @@ package bot
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/DodiNCer/lrcat-go/message"
 	"github.com/DodiNCer/lrcat-go/response"
 	"net/http"
-	"strconv"
 	"strings"
 )
 
@@ -16,7 +16,7 @@ type Bot struct {
 }
 
 // NewBot 创建机器人
-func (Bot) NewBot(webhook string) (bot Bot) {
+func NewBot(webhook string) (bot Bot) {
 	var nb Bot
 	nb.webhook = webhook
 	return nb
@@ -28,21 +28,24 @@ func (bot Bot) Send(msg message.Message) (*response.Response, error) {
 		return nil, errors.New("bot not initialized")
 	}
 	url := bot.webhook
-	post, err := http.Post(url, "application/json", strings.NewReader(msg.GetMsgJson()))
+	msgJson, err := msg.GetMsgJson()
 	if err != nil {
 		return nil, err
 	}
-	var body []byte
-	_, err = post.Body.Read(body)
+	fmt.Println(msgJson)
+	post, err := http.Post(url, "application/json", strings.NewReader(msgJson))
 	if err != nil {
 		return nil, err
 	}
-	defer post.Body.Close()
-	if post.Status != strconv.Itoa(http.StatusOK) {
-		return nil, errors.New("POST status error: " + string(body))
+	if err != nil {
+		return nil, err
+	}
+	if post.StatusCode != http.StatusOK {
+		return nil, errors.New("POST status error: " + post.Status + "\n")
 	}
 	var resp response.Response
-	err = json.Unmarshal(body, &resp)
+	err = json.NewDecoder(post.Body).Decode(&resp)
+	defer post.Body.Close()
 	if err != nil {
 		return nil, err
 	}
