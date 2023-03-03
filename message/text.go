@@ -6,6 +6,9 @@ import (
 	"time"
 )
 
+// TEXT_MESSAGE_CONTENT_TAG 普通消息消息体标签
+const TEXT_MESSAGE_CONTENT_TAG = "text"
+
 // Text 普通文本消息
 type Text struct {
 	Timestamp string                 `json:"timestamp,omitempty"`
@@ -17,7 +20,7 @@ type Text struct {
 // AddContent 添加消息内容
 func (text *Text) AddContent(msg string) {
 	text.Content = map[string]interface{}{
-		TEXT_MESSAGE_TYPE: msg,
+		TEXT_MESSAGE_CONTENT_TAG: msg,
 	}
 }
 
@@ -32,6 +35,7 @@ func (text Text) GetMsgJson() (string, error) {
 	return string(textJson), nil
 }
 
+// SignMsg 签名消息
 func (text *Text) SignMsg(key string) {
 	text.Sign = key
 	text.Timestamp = strconv.FormatInt(time.Now().UnixNano(), 10)
