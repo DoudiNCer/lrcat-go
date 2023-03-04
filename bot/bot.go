@@ -12,18 +12,35 @@ import (
 
 // Bot 机器人
 type Bot struct {
+	enabled bool
 	webhook string
+	Key     string
 }
 
 // NewBot 创建机器人
 func NewBot(webhook string) (bot Bot) {
 	var nb Bot
+	nb.enabled = true
 	nb.webhook = webhook
 	return nb
 }
 
+// Disable 禁用机器人
+func (bot *Bot) Disable() {
+	bot.enabled = false
+}
+
+// ReEnable 重新启用机器人
+func (bot *Bot) ReEnable() {
+	bot.enabled = true
+}
+
 // Send 发送消息
 func (bot Bot) Send(msg message.Message) (*response.Response, error) {
+	// 处理全局开关
+	if !bot.enabled {
+		return nil, nil
+	}
 	if bot.webhook == "" {
 		return nil, errors.New("bot not initialized")
 	}

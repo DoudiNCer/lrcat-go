@@ -7,44 +7,44 @@ import (
 	"time"
 )
 
-// TEXT_MESSAGE_CONTENT_TAG 普通消息消息体标签
-const TEXT_MESSAGE_CONTENT_TAG = "text"
+// 群名片消息消息体标签
+const SHARE_CHAT_MESSAGE_CONTENT_TAG = "share_chat_id"
 
-// Text 普通文本消息
-type Text struct {
+// 群名片消息
+type ShareChat struct {
 	Timestamp string                 `json:"timestamp,omitempty"`
 	Sign      string                 `json:"sign,omitempty"`
 	MsgType   string                 `json:"msg_type"`
 	Content   map[string]interface{} `json:"content"`
 }
 
-// AddContent 添加消息内容
-func (text *Text) AddContent(msg string) {
-	text.Content = map[string]interface{}{
-		TEXT_MESSAGE_CONTENT_TAG: msg,
+// 添加消息内容
+func (sc *ShareChat) AddContent(msg string) {
+	sc.Content = map[string]interface{}{
+		SHARE_CHAT_MESSAGE_CONTENT_TAG: msg,
 	}
 }
 
 // GetMsgJson 获取用于发送的请求体 JSON
-func (text Text) GetMsgJson() (string, error) {
-	if text.MsgType == "" {
-		text.MsgType = TEXT_MESSAGE_TYPE
+func (sc ShareChat) GetMsgJson() (string, error) {
+	if sc.MsgType == "" {
+		sc.MsgType = SHARE_CHAT_MESSAGE_TYPE
 	}
-	textJson, err := json.Marshal(text)
+	textJson, err := json.Marshal(sc)
 	if err != nil {
 		return "", err
 	}
 	return string(textJson), nil
 }
 
-// SignMsg 签名消息
-func (text *Text) SignMsg(key string) error {
+// 签名消息
+func (sc *ShareChat) SignMsg(key string) error {
 	timestamp := time.Now().Unix()
 	sign, err := utils.GetSign(key, timestamp)
 	if err != nil {
 		return err
 	}
-	text.Sign = sign
-	text.Timestamp = strconv.FormatInt(timestamp, 10)
+	sc.Sign = sign
+	sc.Timestamp = strconv.FormatInt(timestamp, 10)
 	return err
 }
