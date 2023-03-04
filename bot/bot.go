@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/DodiNCer/lrcat-go/message"
-	"github.com/DodiNCer/lrcat-go/response"
+	"github.com/DoudiNCer/lrcat-go/message"
+	"github.com/DoudiNCer/lrcat-go/response"
 	"net/http"
 	"strings"
 )

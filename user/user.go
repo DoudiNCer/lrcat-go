@@ -1,6 +1,6 @@
 package user
 
-import "github.com/DodiNCer/lrcat-go/message"
+import "github.com/DoudiNCer/lrcat-go/message"
 
 // User 用于构建可以@的用户
 type User struct {

@@ -2,7 +2,7 @@ package message
 
 import (
 	"encoding/json"
-	"github.com/DodiNCer/lrcat-go/utils"
+	"github.com/DoudiNCer/lrcat-go/utils"
 	"strconv"
 	"time"
 )
