@@ -8,7 +8,7 @@ type User struct {
 	// 用户ID，使用Open ID
 	UserId string `json:"user_id"`
 	// 展示出来的用户名
-	UserName string
+	UserName string `json:"user_name"`
 }
 
 // TextMsgUserJson 获取可插入到文本消息的代码
@@ -18,7 +18,7 @@ func (user User) TextMsgUserJson() string {
 
 // RichTextMsgUserObject 获取可插入到富文本消息的结构体
 func (user User) RichTextMsgUserObject() interface{} {
-	user.Tag = message.TAG_AT
+	user.Tag = message.Tag_At
 	return user
 }
 

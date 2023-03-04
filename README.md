@@ -20,12 +20,35 @@ bot.ReEnable()
 > 为了提高效率，未对当前状态进行验证。
 ### 创建普通文本消息
 ```go
-// 创建变量
+// 创建文本消息
 var msg message.Text
 // 填充消息内容
 msg.AddContent("你好，猫猫学姐")
 // 发送消息
 resp, err := myBot.Send(&msg)
+if err != nil {
+    log.Println(send)
+    log.Println(err.Error())
+}
+```
+### 创建富文本消息
+```go
+// 创建富文本消息
+var msg message.RichText
+// 创建“一篇”富文本消息
+rtcp := message.InitRichTextContentPart("你好，猫猫")
+// 段落段落切片
+var plist []interface{}
+// 添加@消息
+plist = append(plist, user.GetAtUser("xxxxxxxxxxxxxxxxxxx", "猫猫学姐").RichTextMsgUserObject())
+// 添加链接消息
+plist = append(plist, message.GetRichULink("\n项目链接", "https://github.com/DoudiNCer/lrcat-go"))
+// 将段落切片填充到消息中
+rtcp.AddParam(plist)
+// 指定语言版本
+msg.AddContent("zh-cn", rtcp)
+// 发送消息
+send, err := myBot.Send(&msg)
 if err != nil {
     log.Println(send)
     log.Println(err.Error())
