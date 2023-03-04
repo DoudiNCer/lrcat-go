@@ -14,6 +14,7 @@ import (
 type Bot struct {
 	enabled bool
 	webhook string
+	Key     string
 }
 
 // NewBot 创建机器人

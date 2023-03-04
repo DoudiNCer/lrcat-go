@@ -2,6 +2,7 @@ package message
 
 import (
 	"encoding/json"
+	"github.com/DodiNCer/lrcat-go/utils"
 	"strconv"
 	"time"
 )
@@ -24,6 +25,7 @@ func (text *Text) AddContent(msg string) {
 	}
 }
 
+// GetMsgJson 获取用于发送的请求体 JSON
 func (text Text) GetMsgJson() (string, error) {
 	if text.MsgType == "" {
 		text.MsgType = TEXT_MESSAGE_TYPE
@@ -36,7 +38,13 @@ func (text Text) GetMsgJson() (string, error) {
 }
 
 // SignMsg 签名消息
-func (text *Text) SignMsg(key string) {
-	text.Sign = key
-	text.Timestamp = strconv.FormatInt(time.Now().UnixNano(), 10)
+func (text *Text) SignMsg(key string) error {
+	timestamp := time.Now().Unix()
+	sign, err := utils.GetSign(key, timestamp)
+	if err != nil {
+		return err
+	}
+	text.Sign = sign
+	text.Timestamp = strconv.FormatInt(timestamp, 10)
+	return err
 }

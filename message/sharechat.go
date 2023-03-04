@@ -2,6 +2,7 @@ package message
 
 import (
 	"encoding/json"
+	"github.com/DodiNCer/lrcat-go/utils"
 	"strconv"
 	"time"
 )
@@ -24,6 +25,7 @@ func (sc *ShareChat) AddContent(msg string) {
 	}
 }
 
+// GetMsgJson 获取用于发送的请求体 JSON
 func (sc ShareChat) GetMsgJson() (string, error) {
 	if sc.MsgType == "" {
 		sc.MsgType = SHARE_CHAT_MESSAGE_TYPE
@@ -36,7 +38,13 @@ func (sc ShareChat) GetMsgJson() (string, error) {
 }
 
 // 签名消息
-func (sc *ShareChat) SignMsg(key string) {
-	sc.Sign = key
-	sc.Timestamp = strconv.FormatInt(time.Now().UnixNano(), 10)
+func (sc *ShareChat) SignMsg(key string) error {
+	timestamp := time.Now().Unix()
+	sign, err := utils.GetSign(key, timestamp)
+	if err != nil {
+		return err
+	}
+	sc.Sign = sign
+	sc.Timestamp = strconv.FormatInt(timestamp, 10)
+	return err
 }
